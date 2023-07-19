@@ -6,6 +6,7 @@ import android.media.MediaPlayer;
 import android.os.Build;
 import android.os.Handler;
 import android.speech.tts.TextToSpeech;
+import android.speech.tts.UtteranceProgressListener;
 import android.util.Log;
 import androidx.appcompat.app.AppCompatActivity;
 import com.folioreader.Constants;
@@ -104,25 +105,33 @@ public class MediaController {
         mTextToSpeech = new TextToSpeech(context, new TextToSpeech.OnInitListener() {
             @Override
             public void onInit(int status) {
-                if (status != TextToSpeech.ERROR) {
-                    mTextToSpeech.setLanguage(Locale.UK);
-                    mTextToSpeech.setSpeechRate(0.70f);
-                }
-
-                mTextToSpeech.setOnUtteranceCompletedListener(
-                        new TextToSpeech.OnUtteranceCompletedListener() {
-                            @Override
-                            public void onUtteranceCompleted(String utteranceId) {
-                                ((AppCompatActivity) context).runOnUiThread(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        if (mIsSpeaking) {
-                                            callbacks.highLightTTS();
-                                        }
+                try {
+                    if (status != TextToSpeech.ERROR) {
+                        mTextToSpeech.setLanguage(Locale.UK);
+                        mTextToSpeech.setSpeechRate(0.70f);
+                    }
+                    mTextToSpeech.setOnUtteranceProgressListener(new UtteranceProgressListener() {
+                        @Override
+                        public void onStart(String utteranceId) {
+                        }
+                        @Override
+                        public void onDone(String utteranceId) {
+                            ((AppCompatActivity) context).runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    if (mIsSpeaking) {
+                                        callbacks.highLightTTS();
                                     }
-                                });
-                            }
-                        });
+                                }
+                            });
+                        }
+                        @Override
+                        public void onError(String utteranceId) {
+                        }
+                    });
+                }catch (Exception e) {
+                    Log.e(TAG, e.getMessage());
+                }
             }
         });
     }
