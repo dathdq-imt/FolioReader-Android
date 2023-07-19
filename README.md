@@ -27,7 +27,7 @@ FolioReader-Android is an EPUB reader written in Java and Kotlin.
 - [x] Distraction Free Reading
 
 ## Demo
-##### Custom Fonts
+##### Custom Fonts 
 ![Custom fonts](https://cloud.githubusercontent.com/assets/1277242/19012915/0661c7b2-87e0-11e6-81d6-8c71051e1074.gif)
 ##### Day and Night Mode
 ![Day night mode](https://cloud.githubusercontent.com/assets/1277242/19012914/f42059c4-87df-11e6-97f8-29e61a79e8aa.gif)
