@@ -3,18 +3,18 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent">
 
-    <LinearLayout
-        android:id="@+id/layout_loading"
+    <LinearLayout android:id="@+id/layout_loading"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:orientation="vertical"
-        android:gravity="center">
+        android:gravity="center"
+        xmlns:android="http://schemas.android.com/apk/res/android">
 
         <ProgressBar
             android:id="@+id/loading"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            style="?android:attr/android:progressBarStyle" />
+            style="?android:attr/progressBarStyle" />
 
         <TextView
             android:id="@+id/label_loading"
