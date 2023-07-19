@@ -696,13 +696,13 @@ class FolioActivity : AppCompatActivity(), FolioActivityCallback, MediaControlle
         distractionFreeMode = visibility != View.SYSTEM_UI_FLAG_VISIBLE
         Log.v(LOG_TAG, "-> distractionFreeMode = $distractionFreeMode")
 
-        if (actionBar != null) {
-            if (distractionFreeMode) {
-                actionBar!!.hide()
-            } else {
-                actionBar!!.show()
-            }
-        }
+//        if (actionBar != null) {
+//            if (distractionFreeMode) {
+//                actionBar!!.hide()
+//            } else {
+//                actionBar!!.show()
+//            }
+//        }
     }
 
     override fun toggleSystemUI() {
