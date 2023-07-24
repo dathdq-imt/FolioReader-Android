@@ -16,8 +16,6 @@
 package com.folioreader.ui.activity
 
 import android.Manifest
-import android.Manifest.permission.READ_EXTERNAL_STORAGE
-import android.Manifest.permission.WRITE_EXTERNAL_STORAGE
 import android.app.Activity
 import android.app.ActivityManager
 import android.content.BroadcastReceiver
@@ -29,18 +27,12 @@ import android.graphics.Rect
 import android.graphics.drawable.ColorDrawable
 import android.net.Uri
 import android.os.Build
-import android.os.Build.VERSION.SDK_INT
 import android.os.Bundle
-import android.os.Environment
 import android.os.Handler
-import android.provider.Settings
 import android.text.TextUtils
 import android.util.DisplayMetrics
 import android.util.Log
-import android.view.Menu
-import android.view.MenuItem
-import android.view.View
-import android.view.WindowManager
+import android.view.*
 import android.widget.Toast
 import androidx.appcompat.app.ActionBar
 import androidx.appcompat.app.AppCompatActivity
@@ -303,6 +295,11 @@ class FolioActivity : AppCompatActivity(), FolioActivityCallback, MediaControlle
             setupBook()
         }
     }
+    override fun onKeyDown(keyCode: Int, event: KeyEvent?): Boolean {
+        return if (keyCode == KeyEvent.KEYCODE_BACK) {
+            true
+        } else super.onKeyDown(keyCode, event)
+    }
 
     private fun initActionBar() {
 
@@ -380,7 +377,8 @@ class FolioActivity : AppCompatActivity(), FolioActivityCallback, MediaControlle
             menu.findItem(R.id.itemTts).isVisible = false
 
         findViewById<View>(R.id.btn_close).setOnClickListener {
-            closeReader()
+            var folioPageFragment: FolioPageFragment? = currentFragment
+            lastReadLocator = folioPageFragment!!.getLastReadLocator()
             finish()
         }
 
@@ -852,24 +850,20 @@ class FolioActivity : AppCompatActivity(), FolioActivityCallback, MediaControlle
     }
 
     fun closeReader() {
-        try {
-            if (outState != null)
-                outState!!.putSerializable(BUNDLE_READ_LOCATOR_CONFIG_CHANGE, lastReadLocator)
+        if (outState != null)
+            outState!!.putSerializable(BUNDLE_READ_LOCATOR_CONFIG_CHANGE, lastReadLocator)
 
-            val localBroadcastManager = LocalBroadcastManager.getInstance(this)
-            localBroadcastManager.unregisterReceiver(searchReceiver)
-            localBroadcastManager.unregisterReceiver(closeBroadcastReceiver)
+        val localBroadcastManager = LocalBroadcastManager.getInstance(this)
+        localBroadcastManager.unregisterReceiver(searchReceiver)
+        localBroadcastManager.unregisterReceiver(closeBroadcastReceiver)
 
-            if (r2StreamerServer != null)
-                r2StreamerServer!!.stop()
+        if (r2StreamerServer != null)
+            r2StreamerServer!!.stop()
 
-            if (isFinishing) {
-                localBroadcastManager.sendBroadcast(Intent(FolioReader.ACTION_FOLIOREADER_CLOSED))
-                FolioReader.get().retrofit = null
-                FolioReader.get().r2StreamerApi = null
-            }
-        }catch (e: Exception) {
-            Log.e(LOG_TAG, "-> ", e)
+        if (isFinishing) {
+            localBroadcastManager.sendBroadcast(Intent(FolioReader.ACTION_FOLIOREADER_CLOSED))
+            FolioReader.get().retrofit = null
+            FolioReader.get().r2StreamerApi = null
         }
     }
 

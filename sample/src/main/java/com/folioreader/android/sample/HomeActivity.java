@@ -44,6 +44,7 @@ public class HomeActivity extends AppCompatActivity
 
     private static final String LOG_TAG = HomeActivity.class.getSimpleName();
     private FolioReader folioReader;
+    private String locator;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -80,24 +81,22 @@ public class HomeActivity extends AppCompatActivity
                 Config config = AppUtil.getSavedConfig(getApplicationContext());
                 if (config == null)
                     config = new Config();
-                config.setAllowedDirection(Config.AllowedDirection.VERTICAL_AND_HORIZONTAL);
+                config.setAllowedDirection(Config.AllowedDirection.ONLY_HORIZONTAL);
 
                 folioReader.setReadLocator(readLocator);
                 folioReader.setConfig(config, true)
-                        .openBook("file:///android_asset/TheSilverChair.epub");
+                        .openBook("/data/data/com.folioreader.android.sample/epub/TheSilverChair.epub");
             }
         });
     }
 
     private ReadLocator getLastReadLocator() {
-
-        String jsonString = loadAssetTextAsString("Locators/LastReadLocators/last_read_locator_1.json");
-        return ReadLocator.fromJson(jsonString);
+        return ReadLocator.fromJson(locator);
     }
 
     @Override
     public void saveReadLocator(ReadLocator readLocator) {
-        Log.i(LOG_TAG, "-> saveReadLocator -> " + readLocator.toJson());
+        locator = readLocator.toJson();
     }
 
     /*
