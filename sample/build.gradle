@@ -5,12 +5,12 @@ apply plugin: 'kotlin-android-extensions'
 
 android {
 
-    compileSdkVersion versions.androidCompileSdk
+    compileSdkVersion 33
 
     defaultConfig {
         applicationId "com.folioreader.android.sample"
-        minSdkVersion versions.androidMinSdk
-        targetSdkVersion versions.androidTargetSdk
+        minSdkVersion 21
+        targetSdkVersion 33
         versionCode versions.projectVersionCode
         versionName versions.projectVersionName
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
