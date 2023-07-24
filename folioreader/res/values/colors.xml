@@ -8,6 +8,7 @@
     <color name="default_theme_accent_color">#71C951</color>
     <color name="transparent_black">#80000000</color>
     <color name="borders">#F1EFF2</color>
+    <color name="day">#e3c79a</color>
     <color name="black">#000000</color>
     <color name="night">#322D32</color>
     <color name="dark_night">#090609</color>

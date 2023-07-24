@@ -75,6 +75,6 @@ class FolioSearchView : SearchView {
     }
 
     fun setNightMode() {
-        searchAutoComplete.setTextColor(ContextCompat.getColor(context, R.color.white))
+        searchAutoComplete.setTextColor(ContextCompat.getColor(context, R.color.day))
     }
 }

@@ -80,7 +80,7 @@ class ConfigBottomSheetDialogFragment : BottomSheetDialogFragment() {
         if (isNightMode) {
             container.setBackgroundColor(ContextCompat.getColor(context!!, R.color.night))
         } else {
-            container.setBackgroundColor(ContextCompat.getColor(context!!, R.color.white))
+            container.setBackgroundColor(ContextCompat.getColor(context!!, R.color.day))
         }
 
         if (isNightMode) {
@@ -193,7 +193,7 @@ class ConfigBottomSheetDialogFragment : BottomSheetDialogFragment() {
 
     private fun toggleBlackTheme() {
 
-        val day = ContextCompat.getColor(context!!, R.color.white)
+        val day = ContextCompat.getColor(context!!, R.color.day)
         val night = ContextCompat.getColor(context!!, R.color.night)
 
         val colorAnimation = ValueAnimator.ofObject(
