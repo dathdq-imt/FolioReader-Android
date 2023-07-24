@@ -379,7 +379,10 @@ class FolioActivity : AppCompatActivity(), FolioActivityCallback, MediaControlle
         if (!config.isShowTts)
             menu.findItem(R.id.itemTts).isVisible = false
 
-        findViewById<View>(R.id.btn_close).setOnClickListener { onBackPressedDispatcher.onBackPressed() }
+        findViewById<View>(R.id.btn_close).setOnClickListener {
+            closeReader()
+            finish()
+        }
 
         return true
     }
@@ -845,21 +848,28 @@ class FolioActivity : AppCompatActivity(), FolioActivityCallback, MediaControlle
 
     override fun onDestroy() {
         super.onDestroy()
+        closeReader()
+    }
 
-        if (outState != null)
-            outState!!.putSerializable(BUNDLE_READ_LOCATOR_CONFIG_CHANGE, lastReadLocator)
+    fun closeReader() {
+        try {
+            if (outState != null)
+                outState!!.putSerializable(BUNDLE_READ_LOCATOR_CONFIG_CHANGE, lastReadLocator)
 
-        val localBroadcastManager = LocalBroadcastManager.getInstance(this)
-        localBroadcastManager.unregisterReceiver(searchReceiver)
-        localBroadcastManager.unregisterReceiver(closeBroadcastReceiver)
+            val localBroadcastManager = LocalBroadcastManager.getInstance(this)
+            localBroadcastManager.unregisterReceiver(searchReceiver)
+            localBroadcastManager.unregisterReceiver(closeBroadcastReceiver)
 
-        if (r2StreamerServer != null)
-            r2StreamerServer!!.stop()
+            if (r2StreamerServer != null)
+                r2StreamerServer!!.stop()
 
-        if (isFinishing) {
-            localBroadcastManager.sendBroadcast(Intent(FolioReader.ACTION_FOLIOREADER_CLOSED))
-            FolioReader.get().retrofit = null
-            FolioReader.get().r2StreamerApi = null
+            if (isFinishing) {
+                localBroadcastManager.sendBroadcast(Intent(FolioReader.ACTION_FOLIOREADER_CLOSED))
+                FolioReader.get().retrofit = null
+                FolioReader.get().r2StreamerApi = null
+            }
+        }catch (e: Exception) {
+            Log.e(LOG_TAG, "-> ", e)
         }
     }
 
