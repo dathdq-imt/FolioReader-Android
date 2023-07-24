@@ -379,7 +379,7 @@ class FolioActivity : AppCompatActivity(), FolioActivityCallback, MediaControlle
         if (!config.isShowTts)
             menu.findItem(R.id.itemTts).isVisible = false
 
-        findViewById<View>(R.id.btn_close).setOnClickListener { finish() }
+        findViewById<View>(R.id.btn_close).setOnClickListener { onBackPressedDispatcher.onBackPressed() }
 
         return true
     }
