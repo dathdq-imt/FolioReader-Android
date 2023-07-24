@@ -309,6 +309,7 @@ class FolioActivity : AppCompatActivity(), FolioActivityCallback, MediaControlle
         val drawable = ContextCompat.getDrawable(this, R.drawable.ic_drawer)
         UiUtil.setColorIntToDrawable(config.themeColor, drawable!!)
         toolbar!!.navigationIcon = drawable
+        supportActionBar!!.setDisplayShowTitleEnabled(false)
 
         if (config.isNightMode) {
             setNightMode()
@@ -321,9 +322,7 @@ class FolioActivity : AppCompatActivity(), FolioActivityCallback, MediaControlle
             if (config.isNightMode) {
                 color = ContextCompat.getColor(this, R.color.black)
             } else {
-                val attrs = intArrayOf(android.R.attr.navigationBarColor)
-                val typedArray = theme.obtainStyledAttributes(attrs)
-                color = typedArray.getColor(0, ContextCompat.getColor(this, R.color.white))
+                color = ContextCompat.getColor(this, R.color.page_view)
             }
             window.navigationBarColor = color
         }
@@ -338,8 +337,10 @@ class FolioActivity : AppCompatActivity(), FolioActivityCallback, MediaControlle
         Log.v(LOG_TAG, "-> setDayMode")
 
         actionBar!!.setBackgroundDrawable(
-            ColorDrawable(ContextCompat.getColor(this, R.color.white))
+            ColorDrawable(ContextCompat.getColor(this, R.color.page_view))
         )
+        findViewById<View>(R.id.navigation_bar).background = ColorDrawable(ContextCompat.getColor(this, R.color.page_view))
+        findViewById<View>(R.id.main).background = ColorDrawable(ContextCompat.getColor(this, R.color.page_view))
         toolbar!!.setTitleTextColor(ContextCompat.getColor(this, R.color.black))
     }
 
@@ -349,6 +350,8 @@ class FolioActivity : AppCompatActivity(), FolioActivityCallback, MediaControlle
         actionBar!!.setBackgroundDrawable(
             ColorDrawable(ContextCompat.getColor(this, R.color.black))
         )
+        findViewById<View>(R.id.navigation_bar).background = ColorDrawable(ContextCompat.getColor(this, R.color.black))
+        findViewById<View>(R.id.main).background = ColorDrawable(ContextCompat.getColor(this, R.color.black))
         toolbar!!.setTitleTextColor(ContextCompat.getColor(this, R.color.night_title_text_color))
     }
 
@@ -369,6 +372,8 @@ class FolioActivity : AppCompatActivity(), FolioActivityCallback, MediaControlle
         if (!config.isShowTts)
             menu.findItem(R.id.itemTts).isVisible = false
 
+        findViewById<View>(R.id.btn_close).setOnClickListener { finish() }
+
         return true
     }
 
@@ -381,8 +386,8 @@ class FolioActivity : AppCompatActivity(), FolioActivityCallback, MediaControlle
             Log.v(LOG_TAG, "-> onOptionsItemSelected -> drawer")
             startContentHighlightActivity()
             return true
-
-        } else if (itemId == R.id.itemSearch) {
+        }
+        else if (itemId == R.id.itemSearch) {
             Log.v(LOG_TAG, "-> onOptionsItemSelected -> " + item.title)
             if (searchUri == null)
                 return true

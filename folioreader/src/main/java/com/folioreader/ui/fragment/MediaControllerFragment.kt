@@ -318,6 +318,6 @@ class MediaControllerFragment : BottomSheetDialogFragment() {
     }
 
     fun setDayMode() {
-        container?.setBackgroundColor(ContextCompat.getColor(context!!, R.color.white))
+        container?.setBackgroundColor(ContextCompat.getColor(context!!, R.color.page_view))
     }
 }

@@ -29,4 +29,6 @@
     <color name="highlight_blue">#ADD8FF</color>
     <color name="highlight_pink">#FFB0CA</color>
 
+    <color name="page_view">#f2e2c9</color>
+
 </resources>
