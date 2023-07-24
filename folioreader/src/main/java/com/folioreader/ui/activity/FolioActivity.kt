@@ -15,6 +15,7 @@
  */
 package com.folioreader.ui.activity
 
+import android.Manifest
 import android.Manifest.permission.READ_EXTERNAL_STORAGE
 import android.Manifest.permission.WRITE_EXTERNAL_STORAGE
 import android.app.Activity
@@ -287,50 +288,19 @@ class FolioActivity : AppCompatActivity(), FolioActivityCallback, MediaControlle
         initActionBar()
         initMediaController()
 
-        if (checkPermission()) {
-            setupBook()
-        } else {
-            requestPermission()
-            ActivityCompat.requestPermissions(
-                this@FolioActivity,
-                Constants.getWriteExternalStoragePerms(),
-                Constants.WRITE_EXTERNAL_STORAGE_REQUEST
-            )
-        }
-    }
-
-    private fun checkPermission(): Boolean {
-        return if (SDK_INT >= Build.VERSION_CODES.R) {
-            Environment.isExternalStorageManager()
-        } else {
-            val result =
-                ContextCompat.checkSelfPermission(this@FolioActivity, READ_EXTERNAL_STORAGE)
-            val result1 =
-                ContextCompat.checkSelfPermission(this@FolioActivity, WRITE_EXTERNAL_STORAGE)
-            result == PackageManager.PERMISSION_GRANTED && result1 == PackageManager.PERMISSION_GRANTED
-        }
-    }
-
-    private fun requestPermission() {
-        if (SDK_INT >= Build.VERSION_CODES.R) {
-            try {
-                val intent = Intent(Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION)
-                intent.addCategory("android.intent.category.DEFAULT")
-                intent.data =
-                    Uri.parse(String.format("package:%s", applicationContext.packageName))
-                startActivityForResult(intent, 2296)
-            } catch (e: java.lang.Exception) {
-                val intent = Intent()
-                intent.action = Settings.ACTION_MANAGE_ALL_FILES_ACCESS_PERMISSION
-                startActivityForResult(intent, 2296)
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) {
+            if (ContextCompat.checkSelfPermission(
+                    this, Manifest.permission.WRITE_EXTERNAL_STORAGE
+                ) != PackageManager.PERMISSION_GRANTED
+            ) {
+                ActivityCompat.requestPermissions(
+                    this, getWriteExternalStoragePerms(), WRITE_EXTERNAL_STORAGE_REQUEST
+                )
+            } else {
+                setupBook()
             }
         } else {
-            //below android 11
-            ActivityCompat.requestPermissions(
-                this@FolioActivity,
-                arrayOf(WRITE_EXTERNAL_STORAGE),
-                666
-            )
+            setupBook()
         }
     }
 
@@ -828,17 +798,7 @@ class FolioActivity : AppCompatActivity(), FolioActivityCallback, MediaControlle
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == 666) {
-            if (SDK_INT >= Build.VERSION_CODES.R) {
-                if (Environment.isExternalStorageManager()) {
-                    setupBook()
-                } else {
-                    Toast.makeText(this, "Allow permission for storage access!", Toast.LENGTH_SHORT)
-                        .show()
-                }
-            }
-        }
-        else if (requestCode == RequestCode.SEARCH.value) {
+        if (requestCode == RequestCode.SEARCH.value) {
             Log.v(LOG_TAG, "-> onActivityResult -> " + RequestCode.SEARCH)
 
             if (resultCode == Activity.RESULT_CANCELED)
@@ -1085,15 +1045,13 @@ class FolioActivity : AppCompatActivity(), FolioActivityCallback, MediaControlle
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
         when (requestCode) {
-            666 -> if (grantResults.isNotEmpty()) {
-                val READ_EXTERNAL_STORAGE = grantResults[0] === PackageManager.PERMISSION_GRANTED
-                val WRITE_EXTERNAL_STORAGE = grantResults[1] === PackageManager.PERMISSION_GRANTED
-                if (READ_EXTERNAL_STORAGE && WRITE_EXTERNAL_STORAGE) {
-                    setupBook()
-                } else {
-                    Toast.makeText(this, "Allow permission for storage access!", Toast.LENGTH_SHORT)
-                        .show()
-                }
+            WRITE_EXTERNAL_STORAGE_REQUEST -> if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                setupBook()
+            } else {
+                Toast.makeText(
+                    this, getString(R.string.cannot_access_epub_message), Toast.LENGTH_LONG
+                ).show()
+                finish()
             }
         }
     }
