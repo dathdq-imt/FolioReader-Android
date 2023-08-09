@@ -42,6 +42,20 @@ body {
     padding: 20px 20px !important;
     overflow: !important;
 }
+a:link {
+     color: deepskyblue;
+     background-color: transparent;
+     text-decoration: none;
+}
+a:visited {
+     color: deepskyblue;
+     background-color: transparent;
+     text-decoration: none;
+}
+a:active {
+     color: deepskyblue;
+     background-color: transparent;
+}
 
 /* Custom padding for tablets */
 /*
