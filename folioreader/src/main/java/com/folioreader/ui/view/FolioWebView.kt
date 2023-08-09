@@ -1,5 +1,6 @@
 package com.folioreader.ui.view
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.Rect
 import android.graphics.drawable.BitmapDrawable
@@ -41,6 +42,7 @@ import kotlinx.android.synthetic.main.text_selection.view.*
 import org.json.JSONObject
 import org.springframework.util.ReflectionUtils
 import java.lang.ref.WeakReference
+
 
 /**
  * @author by mahavir on 3/31/16.
@@ -229,6 +231,8 @@ class FolioWebView : WebView {
     constructor(context: Context, attrs: AttributeSet) : super(context, attrs)
     constructor(context: Context, attrs: AttributeSet, defStyleAttr: Int) : super(context, attrs, defStyleAttr)
 
+
+    @SuppressLint("ClickableViewAccessibility")
     private fun init() {
         Log.v(LOG_TAG, "-> init")
 
@@ -475,14 +479,6 @@ class FolioWebView : WebView {
 
         override fun onPrepareActionMode(mode: ActionMode, menu: Menu): Boolean {
             Log.d(LOG_TAG, "-> onPrepareActionMode")
-
-            evaluateJavascript("javascript:getSelectionRect()") { value ->
-                val rectJson = JSONObject(value)
-                setSelectionRect(
-                    rectJson.getInt("left"), rectJson.getInt("top"),
-                    rectJson.getInt("right"), rectJson.getInt("bottom")
-                )
-            }
             return false
         }
 
@@ -494,6 +490,16 @@ class FolioWebView : WebView {
         override fun onDestroyActionMode(mode: ActionMode) {
             Log.d(LOG_TAG, "-> onDestroyActionMode")
             dismissPopupWindow()
+            evaluateJavascript("javascript:getSelectionRect()") { value ->
+                val inTouchMode = lastTouchAction == MotionEvent.ACTION_UP
+                if (!inTouchMode) {
+                    val rectJson = JSONObject(value)
+                    setSelectionRect(
+                        rectJson.getInt("left"), rectJson.getInt("top"),
+                        rectJson.getInt("right"), rectJson.getInt("bottom")
+                    )
+                }
+            }
         }
     }
 
@@ -519,18 +525,20 @@ class FolioWebView : WebView {
         override fun onDestroyActionMode(mode: ActionMode) {
             Log.d(LOG_TAG, "-> onDestroyActionMode")
             dismissPopupWindow()
+            evaluateJavascript("javascript:getSelectionRect()") { value ->
+                val inTouchMode = lastTouchAction == MotionEvent.ACTION_UP
+                if (!inTouchMode) {
+                    val rectJson = JSONObject(value)
+                    setSelectionRect(
+                        rectJson.getInt("left"), rectJson.getInt("top"),
+                        rectJson.getInt("right"), rectJson.getInt("bottom")
+                    )
+                }
+            }
         }
 
         override fun onGetContentRect(mode: ActionMode, view: View, outRect: Rect) {
             Log.d(LOG_TAG, "-> onGetContentRect")
-
-            evaluateJavascript("javascript:getSelectionRect()") { value ->
-                val rectJson = JSONObject(value)
-                setSelectionRect(
-                    rectJson.getInt("left"), rectJson.getInt("top"),
-                    rectJson.getInt("right"), rectJson.getInt("bottom")
-                )
-            }
         }
     }
 
@@ -656,7 +664,6 @@ class FolioWebView : WebView {
 
     @JavascriptInterface
     fun setSelectionRect(left: Int, top: Int, right: Int, bottom: Int) {
-
         val currentSelectionRect = Rect()
         currentSelectionRect.left = (left * density).toInt()
         currentSelectionRect.top = (top * density).toInt()
@@ -785,6 +792,7 @@ class FolioWebView : WebView {
                     this@FolioWebView, Gravity.NO_GRAVITY,
                     popupRect.left, popupRect.top
                 )
+                lastTouchAction = 3
             } else {
                 Log.i(LOG_TAG, "-> Still scrolling, don't show Popup")
                 oldScrollX = currentScrollX
