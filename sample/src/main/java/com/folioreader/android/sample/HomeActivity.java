@@ -82,7 +82,6 @@ public class HomeActivity extends AppCompatActivity
                 if (config == null)
                     config = new Config();
                 config.setAllowedDirection(Config.AllowedDirection.ONLY_HORIZONTAL);
-
                 folioReader.setReadLocator(readLocator);
                 folioReader.setConfig(config, true)
                         .openBook("/data/data/com.folioreader.android.sample/epub/TheSilverChair.epub");

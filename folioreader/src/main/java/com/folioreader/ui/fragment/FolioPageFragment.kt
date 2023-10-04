@@ -22,6 +22,7 @@ import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
+import com.folioreader.BookUtils
 import com.folioreader.Config
 import com.folioreader.FolioReader
 import com.folioreader.R
@@ -49,8 +50,10 @@ import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
 import org.readium.r2.shared.Link
 import org.readium.r2.shared.Locations
+import java.io.File
 import java.util.*
 import java.util.regex.Pattern
+
 
 /**
  * Created by mahavir on 4/2/16.
@@ -487,6 +490,11 @@ class FolioPageFragment : Fragment(),
                     // Make loading view invisible for all other fragments
                     loadingView!!.hide()
                 }
+            }
+            if (BookUtils.path != null) {
+                val myFile = File(BookUtils.path!!)
+                if (myFile.exists()) myFile.delete()
+                BookUtils.path = null
             }
         }
 

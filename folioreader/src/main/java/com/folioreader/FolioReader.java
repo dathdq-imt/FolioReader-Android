@@ -130,6 +130,7 @@ public class FolioReader {
     }
 
     public FolioReader openBook(String assetOrSdcardPath) {
+        BookUtils.setPath(assetOrSdcardPath);
         Intent intent = getIntentFromUrl(assetOrSdcardPath, 0);
         context.startActivity(intent);
         return singleton;
