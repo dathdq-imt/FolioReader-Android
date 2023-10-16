@@ -492,8 +492,8 @@ class FolioPageFragment : Fragment(),
                 }
             }
             if (BookUtils.path != null) {
-//                val myFile = File(BookUtils.path!!)
-//                if (myFile.exists()) myFile.delete()
+                val myFile = File(BookUtils.path!!)
+                if (myFile.exists()) myFile.delete()
                 BookUtils.path = null
             }
         }

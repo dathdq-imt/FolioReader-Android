@@ -518,12 +518,12 @@ class FolioWebView : WebView {
 
         override fun onDestroyActionMode(mode: ActionMode) {
             Log.d(LOG_TAG, "-> onDestroyActionMode")
-            dismissPopupWindow()
+            lastTouchAction = MotionEvent.ACTION_UP
         }
 
         override fun onGetContentRect(mode: ActionMode, view: View, outRect: Rect) {
             Log.d(LOG_TAG, "-> onGetContentRect")
-
+            lastTouchAction = MotionEvent.ACTION_DOWN
             evaluateJavascript("javascript:getSelectionRect()") { value ->
                 val rectJson = JSONObject(value)
                 setSelectionRect(
@@ -766,13 +766,11 @@ class FolioWebView : WebView {
         Log.d(LOG_TAG, "-> showTextSelectionPopup -> To be laid out popupRect -> $popupRect")
 
         popupWindow.dismiss()
-        oldScrollX = scrollX
-        oldScrollY = scrollY
 
         isScrollingRunnable = Runnable {
             uiHandler.removeCallbacks(isScrollingRunnable)
-            val currentScrollX = scrollX
-            val currentScrollY = scrollY
+            val currentScrollX = popupRect.left
+            val currentScrollY = popupRect.top
             val inTouchMode = lastTouchAction == MotionEvent.ACTION_DOWN ||
                     lastTouchAction == MotionEvent.ACTION_MOVE
 
