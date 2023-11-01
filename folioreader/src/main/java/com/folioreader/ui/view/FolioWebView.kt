@@ -721,7 +721,7 @@ class FolioWebView : WebView {
         val popupY: Int
         if (belowSelectionRect.contains(popupRect)) {
             Log.i(LOG_TAG, "-> show below")
-            popupY = belowSelectionRect.top
+            popupY = belowSelectionRect.top + popupRect.height() / 2
 
         } else {
 
@@ -731,7 +731,7 @@ class FolioWebView : WebView {
 
             if (aboveSelectionRect.contains(popupRect)) {
                 Log.i(LOG_TAG, "-> show above")
-                popupY = aboveSelectionRect.bottom - popupRect.height()
+                popupY = aboveSelectionRect.bottom - popupRect.height() /2
 
             } else {
 
