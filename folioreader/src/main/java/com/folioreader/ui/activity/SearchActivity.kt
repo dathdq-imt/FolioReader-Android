@@ -201,11 +201,11 @@ class SearchActivity : AppCompatActivity(), OnItemClickListener {
         Log.v(LOG_TAG, "-> navigateBack")
 
         val intent = Intent()
-        searchAdapterDataBundle.putInt(
-            BUNDLE_FIRST_VISIBLE_ITEM_INDEX,
-            linearLayoutManager.findFirstVisibleItemPosition()
-        )
-        intent.putExtra(SearchAdapter.DATA_BUNDLE, searchAdapterDataBundle)
+//        searchAdapterDataBundle.putInt(
+//            BUNDLE_FIRST_VISIBLE_ITEM_INDEX,
+//            linearLayoutManager.findFirstVisibleItemPosition()
+//        )
+//        intent.putExtra(SearchAdapter.DATA_BUNDLE, searchAdapterDataBundle)
         intent.putExtra(BUNDLE_SAVE_SEARCH_QUERY, searchView.query)
         setResult(ResultCode.BACK_BUTTON_PRESSED.value, intent)
         finish()
@@ -311,11 +311,11 @@ class SearchActivity : AppCompatActivity(), OnItemClickListener {
                 Log.v(LOG_TAG, "-> onItemClick -> " + viewHolder.searchLocator)
 
                 val intent = Intent()
-                searchAdapterDataBundle.putInt(
-                    BUNDLE_FIRST_VISIBLE_ITEM_INDEX,
-                    linearLayoutManager.findFirstVisibleItemPosition()
-                )
-                intent.putExtra(SearchAdapter.DATA_BUNDLE, searchAdapterDataBundle)
+//                searchAdapterDataBundle.putInt(
+//                    BUNDLE_FIRST_VISIBLE_ITEM_INDEX,
+//                    linearLayoutManager.findFirstVisibleItemPosition()
+//                )
+//                intent.putExtra(SearchAdapter.DATA_BUNDLE, searchAdapterDataBundle)
                 intent.putExtra(FolioActivity.EXTRA_SEARCH_ITEM, viewHolder.searchLocator as Parcelable)
                 intent.putExtra(BUNDLE_SAVE_SEARCH_QUERY, searchView.query)
                 setResult(ResultCode.ITEM_SELECTED.value, intent)

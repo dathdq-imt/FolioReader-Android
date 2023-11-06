@@ -402,8 +402,8 @@ class FolioActivity : AppCompatActivity(), FolioActivityCallback, MediaControlle
             val intent = Intent(this, SearchActivity::class.java)
             intent.putExtra(SearchActivity.BUNDLE_SPINE_SIZE, spine?.size ?: 0)
             intent.putExtra(SearchActivity.BUNDLE_SEARCH_URI, searchUri)
-            intent.putExtra(SearchAdapter.DATA_BUNDLE, searchAdapterDataBundle)
-            intent.putExtra(SearchActivity.BUNDLE_SAVE_SEARCH_QUERY, searchQuery)
+//            intent.putExtra(SearchAdapter.DATA_BUNDLE, searchAdapterDataBundle)
+//            intent.putExtra(SearchActivity.BUNDLE_SAVE_SEARCH_QUERY, searchQuery)
             startActivityForResult(intent, RequestCode.SEARCH.value)
             return true
 
